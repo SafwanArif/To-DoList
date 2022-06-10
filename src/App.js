@@ -1,25 +1,46 @@
-import logo from './logo.svg';
 import './App.css';
+import Form from './components/Form';
+import Person from './components/Input';
+import { useState } from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+    const [inputs, setInput] = useState([
+        { task: "Update List!"},
+    ]);
+
+    const [taskInput, setTaskInput] = useState("")
+
+    const handleClick = (index) => {
+        let storedTasks = [...inputs];
+        storedTasks.splice(index, 1);
+        setInput(storedTasks);
+        console.log("Button was clicked");
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        setInput([...inputs, {task:taskInput}])
+        setTaskInput("")
+    }
+    
+    return ( 
+    <div className = "App">
+        <h1>To-Do List</h1>
+        {inputs.map((task, index) => {
+            return (
+                <Person
+                    task = {task.task}
+                    key = {index}
+                    handleClick = {() => handleClick(index)}
+                />
+            )
+        })}
+        <Form
+        handleSubmit = {handleSubmit}
+        taskInput = {taskInput}
+        setTaskInput = {setTaskInput}
+        />
+    </div> );
 }
 
 export default App;
